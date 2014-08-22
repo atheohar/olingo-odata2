@@ -102,10 +102,10 @@ public class EdmFunctionImportImplProv extends EdmNamedImplProv implements EdmFu
     if (parametersList == null) {
       parametersList = new ArrayList<String>();
 
-      Set<String> keySet = parameters.keySet();
-      Iterator<String> iterator = keySet.iterator();
-      while (iterator.hasNext()) {
-        parametersList.add(iterator.next());
+      if(functionImport.getParameters() != null){
+        for (FunctionImportParameter functionImportParameter : functionImport.getParameters()) {
+          parametersList.add(functionImportParameter.getName());
+        }
       }
     }
 

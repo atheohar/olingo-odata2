@@ -84,8 +84,7 @@ public class JPATypeConvertor {
       return EdmSimpleTypeKind.Boolean;
     } else if (jpaType.equals(java.sql.Time.class)) {
       return EdmSimpleTypeKind.Time;
-    } else if (jpaType.equals(Date.class) || jpaType.equals(Calendar.class) ||
-        jpaType.equals(Timestamp.class) || jpaType.equals(java.util.Date.class)) {
+    } else if (jpaType.equals(Date.class) || jpaType.equals(Timestamp.class) || jpaType.equals(java.util.Date.class)) {
       try {
         if ((currentAttribute != null)
             && (determineTemporalType(currentAttribute)
@@ -93,6 +92,18 @@ public class JPATypeConvertor {
           return EdmSimpleTypeKind.Time;
         } else {
           return EdmSimpleTypeKind.DateTime;
+        }
+      } catch (SecurityException e) {
+        throw ODataJPAModelException.throwException(ODataJPAModelException.GENERAL.addContent(e.getMessage()), e);
+      }
+    } else if (jpaType.equals(Calendar.class)) {
+      try {
+        if ((currentAttribute != null)
+            && (determineTemporalType(currentAttribute)
+              == TemporalType.TIME)) {
+          return EdmSimpleTypeKind.Time;
+        } else {
+          return EdmSimpleTypeKind.DateTimeOffset;
         }
       } catch (SecurityException e) {
         throw ODataJPAModelException.throwException(ODataJPAModelException.GENERAL.addContent(e.getMessage()), e);
